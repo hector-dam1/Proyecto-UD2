@@ -15,7 +15,7 @@ public class Mascota {
     private LocalDate fechaNacimiento;
     private LocalDate fechaDefuncion;
     private String numChip;
-    private double peso;
+    private Double peso;
     private String estado;
 
     public Mascota() {
@@ -23,7 +23,7 @@ public class Mascota {
 
     public Mascota(int idCliente, String nombre, String raza,
                    LocalDate fechaNacimiento, LocalDate fechaDefuncion,
-                   String numChip, double peso, String estado) {
+                   String numChip, Double peso, String estado) {
         this.idCliente = idCliente;
         this.nombre = nombre;
         this.raza = raza;
@@ -36,7 +36,7 @@ public class Mascota {
 
     public Mascota(int idMascota, int idCliente, String nombre, String raza,
                    LocalDate fechaNacimiento, LocalDate fechaDefuncion,
-                   String numChip, double peso, String estado) {
+                   String numChip, Double peso, String estado) {
         this(idCliente, nombre, raza, fechaNacimiento, fechaDefuncion,
                 numChip, peso, estado);
         this.idMascota = idMascota;
@@ -98,11 +98,11 @@ public class Mascota {
         this.numChip = numChip;
     }
 
-    public double getPeso() {
+    public Double getPeso() {
         return peso;
     }
 
-    public void setPeso(double peso) {
+    public void setPeso(Double peso) {
         this.peso = peso;
     }
 
