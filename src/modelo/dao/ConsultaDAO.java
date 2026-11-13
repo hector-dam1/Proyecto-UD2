@@ -190,7 +190,17 @@ public class ConsultaDAO {
                 try (PreparedStatement sentencia =
                         conexion.prepareStatement(sqlActualizar)) {
 
-                    establecerDatos(sentencia, consulta);
+                    sentencia.setInt(1, consulta.getIdCliente());
+                    sentencia.setInt(2, consulta.getIdMascota());
+                    sentencia.setInt(3, consulta.getIdVeterinario());
+                    sentencia.setTimestamp(4, Timestamp.valueOf(consulta.getFecha()));
+
+                    if (consulta.getNota() == null) {
+                        sentencia.setNull(5, Types.VARCHAR);
+                    } else {
+                        sentencia.setString(5, consulta.getNota());
+                    }
+
                     sentencia.setInt(6, consulta.getIdConsulta());
                     sentencia.executeUpdate();
                 }
@@ -305,7 +315,8 @@ public class ConsultaDAO {
             }
 
             if (resultado.getObject("ID_Tratamiento") != null) {
-                consulta.getTratamientos().add(crearTratamiento(resultado));
+                consulta.getTratamientos().add(
+                        crearTratamiento(resultado, incluirIdentificadores));
             }
         }
 
@@ -343,18 +354,23 @@ public class ConsultaDAO {
     /**
      * Construye un tratamiento a partir de la fila actual del ResultSet.
      */
-    private Tratamiento crearTratamiento(ResultSet resultado) throws SQLException {
+    private Tratamiento crearTratamiento(ResultSet resultado,
+            boolean incluirIdentificadores) throws SQLException {
+
+        String nombre = incluirIdentificadores
+                ? resultado.getString("Nombre_Tratamiento")
+                : resultado.getString("Tratamiento");
 
         return new Tratamiento(
                 resultado.getInt("ID_Tratamiento"),
                 resultado.getString("Categoria"),
-                resultado.getString("Nombre_Tratamiento") == null
-                        ? resultado.getString("Tratamiento")
-                        : resultado.getString("Nombre_Tratamiento"),
+                nombre,
                 resultado.getBigDecimal("Precio"),
                 resultado.getInt("Duracion"),
-                resultado.getString("Descripcion"),
-                resultado.getString("Material_Necesario")
+                incluirIdentificadores
+                        ? resultado.getString("Descripcion") : null,
+                incluirIdentificadores
+                        ? resultado.getString("Material_Necesario") : null
         );
     }
 
