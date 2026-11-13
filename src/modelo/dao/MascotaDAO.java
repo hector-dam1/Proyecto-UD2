@@ -113,7 +113,7 @@ public class MascotaDAO {
                 sentencia.setDate(2, Date.valueOf(mascota.getFechaDefuncion()));
             }
 
-            if (mascota.getPeso() <= 0) {
+            if (mascota.getPeso() == null) {
                 sentencia.setNull(3, java.sql.Types.DECIMAL);
             } else {
                 sentencia.setDouble(3, mascota.getPeso());
@@ -145,7 +145,7 @@ public class MascotaDAO {
 
         sentencia.setString(6, mascota.getNumChip());
 
-        if (mascota.getPeso() <= 0) {
+        if (mascota.getPeso() == null) {
             sentencia.setNull(7, java.sql.Types.DECIMAL);
         } else {
             sentencia.setDouble(7, mascota.getPeso());
@@ -163,10 +163,8 @@ public class MascotaDAO {
         Date fechaNacimiento = resultado.getDate("Fecha_Nacimiento");
         Date fechaDefuncion = resultado.getDate("Fecha_Defuncion");
 
-        double peso = resultado.getDouble("Peso");
-        if (resultado.wasNull()) {
-            peso = 0;
-        }
+        Double peso = resultado.getObject("Peso") == null
+                ? null : resultado.getDouble("Peso");
 
         return new Mascota(
                 resultado.getInt("ID_Mascota"),
