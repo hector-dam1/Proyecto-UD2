@@ -187,6 +187,19 @@ public class ConsultaDAO {
                     return 0;
                 }
 
+                /*
+                 * Se eliminan primero las asociaciones antiguas dentro de la
+                 * transaccion. Asi el trigger que valida el cambio de fecha
+                 * no calcula la duracion con los tratamientos anteriores.
+                 * Las nuevas asociaciones volveran a validar el horario.
+                 */
+                try (PreparedStatement sentencia =
+                        conexion.prepareStatement(sqlEliminarTratamientos)) {
+
+                    sentencia.setInt(1, consulta.getIdConsulta());
+                    sentencia.executeUpdate();
+                }
+
                 try (PreparedStatement sentencia =
                         conexion.prepareStatement(sqlActualizar)) {
 
@@ -202,13 +215,6 @@ public class ConsultaDAO {
                     }
 
                     sentencia.setInt(6, consulta.getIdConsulta());
-                    sentencia.executeUpdate();
-                }
-
-                try (PreparedStatement sentencia =
-                        conexion.prepareStatement(sqlEliminarTratamientos)) {
-
-                    sentencia.setInt(1, consulta.getIdConsulta());
                     sentencia.executeUpdate();
                 }
 
