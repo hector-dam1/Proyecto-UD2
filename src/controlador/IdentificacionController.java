@@ -376,6 +376,11 @@ public class IdentificacionController {
             Window ventanaActual = tablaMascotas.getScene().getWindow();
             ventana.initOwner(ventanaActual);
             ventana.setScene(new Scene(contenido));
+            ventana.setOnCloseRequest(event -> {
+                if (!controlador.confirmarCierre()) {
+                    event.consume();
+                }
+            });
             ventana.showAndWait();
 
             cargarMascotas();
