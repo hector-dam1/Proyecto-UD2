@@ -1,0 +1,13 @@
+
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Ejecutar Proyecto UD2",
+            "request": "launch",
+            "mainClass": "App",
+            "vmArgs": "--module-path C:/javafx/javafx-sdk-25.0.5/lib --add-modules javafx.controls,javafx.fxml"
+        }
+    ]
+}
