@@ -128,8 +128,7 @@ public class CitasController {
     }
 
     private Consulta obtenerCitaSeleccionada() {
-        Consulta seleccionada = tablaCitasPendientes.getSelectionModel().getSelectedItem();
-        return seleccionada != null ? seleccionada : tablaHistorialCitas.getSelectionModel().getSelectedItem();
+        return tablaCitasPendientes.getSelectionModel().getSelectedItem();
     }
 
     @FXML private void volverInicio() { cambiarPantalla("/vista/Identificacion.fxml", "Identificación"); }
