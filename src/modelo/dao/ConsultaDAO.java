@@ -260,6 +260,37 @@ public class ConsultaDAO {
     }
 
     /**
+     * Busca un veterinario que no tenga otra cita pendiente solapada
+     * con el intervalo solicitado. Devuelve -1 si no hay disponibilidad.
+     */
+    public int buscarVeterinarioDisponible(java.time.LocalDateTime fecha,
+            int duracion, int idConsultaExcluir) throws SQLException {
+
+        String sql = "SELECT v.ID_Veterinario FROM Veterinario v "
+                + "WHERE NOT EXISTS (SELECT 1 FROM Consulta c "
+                + "WHERE c.ID_Veterinario = v.ID_Veterinario "
+                + "AND c.Estado = 'Pendiente' AND c.ID_Consulta <> ? "
+                + "AND c.Fecha < DATE_ADD(?, INTERVAL ? MINUTE) "
+                + "AND DATE_ADD(c.Fecha, INTERVAL "
+                + "(SELECT COALESCE(SUM(t.Duracion), 0) "
+                + "FROM Consulta_Tratamiento ct "
+                + "JOIN Tratamiento t ON t.ID_Tratamiento = ct.ID_Tratamiento "
+                + "WHERE ct.ID_Consulta = c.ID_Consulta) MINUTE) > ?) "
+                + "ORDER BY v.ID_Veterinario LIMIT 1";
+
+        try (Connection conexion = Conexion.conectar();
+             PreparedStatement sentencia = conexion.prepareStatement(sql)) {
+            sentencia.setInt(1, idConsultaExcluir);
+            sentencia.setTimestamp(2, Timestamp.valueOf(fecha));
+            sentencia.setInt(3, duracion);
+            sentencia.setTimestamp(4, Timestamp.valueOf(fecha));
+            try (ResultSet resultado = sentencia.executeQuery()) {
+                return resultado.next() ? resultado.getInt("ID_Veterinario") : -1;
+            }
+        }
+    }
+
+    /**
      * Asigna los datos de la consulta a los parametros del INSERT.
      */
     private void establecerDatos(PreparedStatement sentencia, Consulta consulta)
