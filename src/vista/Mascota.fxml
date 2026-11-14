@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/25"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controlador.MascotaController"
+      spacing="15">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label fx:id="lblTitulo"
+           text="Datos de la mascota"
+           style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+    <GridPane hgap="10" vgap="12">
+
+        <Label text="Nombre:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtNombre"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Raza:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtRaza"
+                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Fecha de nacimiento:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <DatePicker fx:id="dpFechaNacimiento"
+                    GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Nº Chip:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtNumChip"
+                   GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Label text="Peso (kg):" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtPeso"
+                   promptText="Opcional"
+                   GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+        <Label text="Fecha de defunción:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+        <DatePicker fx:id="dpFechaDefuncion"
+                    GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+        <Label text="Estado:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtEstado"
+                   promptText="Opcional"
+                   GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Guardar" onAction="#guardarMascota"/>
+        <Button text="Cancelar" onAction="#cancelar"/>
+    </HBox>
+
+</VBox>

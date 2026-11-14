@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controlador.CitasController">
+
+    <top>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="20" right="20" bottom="10" left="20"/>
+            </padding>
+            <Label text="Citas de la mascota"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+            <Label fx:id="lblMascotaSeleccionada"
+                   text="Mascota seleccionada:"/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <TitledPane text="Próximas citas programadas" expanded="true">
+                <TableView fx:id="tablaCitasPendientes" prefHeight="200">
+                    <columns>
+                        <TableColumn fx:id="colFechaPendiente" text="Fecha y hora" prefWidth="140"/>
+                        <TableColumn fx:id="colMascotaPendiente" text="Mascota" prefWidth="100"/>
+                        <TableColumn fx:id="colTratamientosPendiente" text="Tratamientos" prefWidth="180"/>
+                        <TableColumn fx:id="colVeterinarioPendiente" text="Veterinario" prefWidth="130"/>
+                        <TableColumn fx:id="colPrecioPendiente" text="Precio (€)" prefWidth="90"/>
+                        <TableColumn fx:id="colEstadoPendiente" text="Estado" prefWidth="100"/>
+                    </columns>
+                </TableView>
+            </TitledPane>
+
+            <TitledPane text="Historial de citas" expanded="true">
+                <TableView fx:id="tablaHistorialCitas" prefHeight="200">
+                    <columns>
+                        <TableColumn fx:id="colFechaHistorial" text="Fecha y hora" prefWidth="140"/>
+                        <TableColumn fx:id="colMascotaHistorial" text="Mascota" prefWidth="100"/>
+                        <TableColumn fx:id="colTratamientosHistorial" text="Tratamientos" prefWidth="180"/>
+                        <TableColumn fx:id="colVeterinarioHistorial" text="Veterinario" prefWidth="130"/>
+                        <TableColumn fx:id="colPrecioHistorial" text="Precio (€)" prefWidth="90"/>
+                        <TableColumn fx:id="colEstadoHistorial" text="Estado" prefWidth="100"/>
+                    </columns>
+                </TableView>
+            </TitledPane>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <padding>
+                <Insets top="10" right="20" bottom="20" left="20"/>
+            </padding>
+            <Button text="Modificar cita" onAction="#modificarCita"/>
+            <Button text="Completar" onAction="#completarCita"/>
+            <Button text="Cancelar cita" onAction="#cancelarCita"/>
+            <Button text="Nueva cita" onAction="#abrirCitaNueva"/>
+            <Button text="Inicio" onAction="#volverInicio"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>
