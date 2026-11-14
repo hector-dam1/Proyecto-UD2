@@ -206,7 +206,7 @@ public class IdentificacionController {
             return;
         }
 
-        abrirFormularioMascota("Nueva mascota");
+        abrirFormularioMascota("Nueva mascota", null);
     }
 
     /**
@@ -228,7 +228,7 @@ public class IdentificacionController {
             return;
         }
 
-        abrirFormularioMascota("Modificar mascota");
+        abrirFormularioMascota("Modificar mascota", mascotaSeleccionada);
     }
 
     /**
@@ -354,12 +354,20 @@ public class IdentificacionController {
     /**
      * Abre el formulario de mascota como ventana modal.
      */
-    private void abrirFormularioMascota(String titulo) {
+    private void abrirFormularioMascota(String titulo, Mascota mascota) {
 
         try {
             FXMLLoader cargador = new FXMLLoader(
                     getClass().getResource("/vista/Mascota.fxml"));
             Parent contenido = cargador.load();
+
+            MascotaController controlador = cargador.getController();
+
+            if (mascota == null) {
+                controlador.configurarNuevaMascota(clienteActual);
+            } else {
+                controlador.configurarEdicionMascota(clienteActual, mascota);
+            }
 
             Stage ventana = new Stage();
             ventana.setTitle(titulo);
