@@ -237,7 +237,7 @@ public class IdentificacionController {
     @FXML
     private void abrirCitas() {
         if (comprobarClienteIdentificado()) {
-            cambiarPantalla("Citas.fxml", "Citas");
+            abrirPantallaConContexto("Citas.fxml", "Citas", null);
         }
     }
 
@@ -257,7 +257,8 @@ public class IdentificacionController {
             return;
         }
 
-        cambiarPantalla("ConsultasTratamientos.fxml", "Consultas y tratamientos");
+        abrirPantallaConContexto("ConsultasTratamientos.fxml",
+                "Consultas y tratamientos", obtenerMascotaSeleccionada());
     }
 
     /**
@@ -266,7 +267,7 @@ public class IdentificacionController {
     @FXML
     private void abrirCitaNueva() {
         if (comprobarClienteIdentificado()) {
-            cambiarPantalla("CitaNueva.fxml", "Nueva cita");
+            abrirPantallaConContexto("CitaNueva.fxml", "Nueva cita", null);
         }
     }
 
@@ -387,6 +388,35 @@ public class IdentificacionController {
 
         } catch (IOException | SQLException e) {
             mostrarError("No se ha podido abrir el formulario de mascota.", e);
+        }
+    }
+
+    /**
+     * Abre una pantalla y transmite el cliente y, cuando corresponde, la mascota.
+     */
+    private void abrirPantallaConContexto(String archivoFXML, String titulo,
+            Mascota mascota) {
+        try {
+            FXMLLoader cargador = new FXMLLoader(
+                    getClass().getResource("/vista/" + archivoFXML));
+            Parent contenido = cargador.load();
+
+            switch (archivoFXML) {
+                case "Citas.fxml" -> cargador.<CitasController>getController()
+                        .configurarCliente(clienteActual);
+                case "ConsultasTratamientos.fxml" -> cargador
+                        .<ConsultasTratamientosController>getController()
+                        .configurarContexto(clienteActual, mascota);
+                case "CitaNueva.fxml" -> cargador.<CitaNuevaController>getController()
+                        .configurarContexto(clienteActual, null);
+                default -> { }
+            }
+
+            Stage ventana = (Stage) tablaMascotas.getScene().getWindow();
+            ventana.setTitle(titulo);
+            ventana.setScene(new Scene(contenido));
+        } catch (IOException | NullPointerException e) {
+            mostrarError("No se ha podido abrir la pantalla " + archivoFXML + ".", e);
         }
     }
 
