@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controlador.IdentificacionController">
+
+    <top>
+        <VBox spacing="10" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets top="20" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <Label text="Identificación del cliente"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Buscar por DNI/NIE:"/>
+                <TextField fx:id="txtDniNif"
+                           promptText="Introduce el DNI/NIE"
+                           HBox.hgrow="ALWAYS"/>
+                <Button text="Buscar" onAction="#buscarCliente"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <TitledPane text="Datos del cliente" expanded="true">
+                <GridPane hgap="10" vgap="10">
+                    <padding>
+                        <Insets top="12" right="12" bottom="12" left="12"/>
+                    </padding>
+
+                    <Label text="DNI/NIF:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <TextField fx:id="txtDniCliente" editable="false"
+                               GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                    <Label text="Nombre:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <TextField fx:id="txtNombre"
+                               GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                    <Label text="Apellidos:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <TextField fx:id="txtApellidos"
+                               GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                    <Label text="Teléfono:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                    <TextField fx:id="txtTelefono" promptText="+34"
+                               GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                    <Label text="Email:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                    <TextField fx:id="txtEmail"
+                               GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+                    <Label text="Dirección:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                    <TextField fx:id="txtDireccion"
+                               GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+                </GridPane>
+            </TitledPane>
+
+            <TitledPane text="Mascotas asociadas" expanded="true">
+                <VBox spacing="10">
+                    <TableView fx:id="tablaMascotas" prefHeight="180">
+                        <columns>
+                            <TableColumn fx:id="colNombreMascota" text="Nombre" prefWidth="120"/>
+                            <TableColumn fx:id="colRaza" text="Raza" prefWidth="140"/>
+                            <TableColumn fx:id="colEdad" text="Edad" prefWidth="70"/>
+                            <TableColumn fx:id="colChip" text="Nº Chip" prefWidth="150"/>
+                            <TableColumn fx:id="colPeso" text="Peso (kg)" prefWidth="90"/>
+                            <TableColumn fx:id="colEstadoMascota" text="Estado" prefWidth="100"/>
+                        </columns>
+                    </TableView>
+
+                    <HBox spacing="10">
+                        <Button text="Nueva mascota" onAction="#abrirNuevaMascota"/>
+                        <Button text="Modificar mascota" onAction="#modificarMascota"/>
+                    </HBox>
+                </VBox>
+            </TitledPane>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <padding>
+                <Insets top="10" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Button text="Guardar cambios" onAction="#guardarCliente"/>
+            <Button text="Consultar citas" onAction="#abrirCitas"/>
+            <Button text="Consultar tratamientos" onAction="#abrirConsultasTratamientos"/>
+            <Button text="Cita nueva" onAction="#abrirCitaNueva"/>
+            <Button text="Catálogo de tratamientos" onAction="#abrirCatalogoTratamientos"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>
