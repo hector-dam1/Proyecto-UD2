@@ -49,6 +49,7 @@ public class MascotaController {
     private Cliente clienteActual;
     private Mascota mascotaActual;
     private boolean modoEdicion;
+    private boolean guardado;
 
     /**
      * Configura el formulario para registrar una mascota nueva.
@@ -57,6 +58,7 @@ public class MascotaController {
         clienteActual = cliente;
         mascotaActual = null;
         modoEdicion = false;
+        guardado = false;
 
         lblTitulo.setText("Nueva mascota");
         txtRaza.setDisable(false);
@@ -71,6 +73,7 @@ public class MascotaController {
         clienteActual = cliente;
         mascotaActual = mascota;
         modoEdicion = true;
+        guardado = false;
 
         lblTitulo.setText("Modificar mascota");
         txtNombre.setText(mascota.getNombre());
@@ -212,6 +215,7 @@ public class MascotaController {
                         "La mascota se ha registrado correctamente.");
             }
 
+            guardado = true;
             cerrarVentana();
 
         } catch (SQLException e) {
@@ -225,25 +229,36 @@ public class MascotaController {
      */
     @FXML
     private void cancelar() {
+        cerrarVentana();
+    }
 
-        if (hayCambiosSinGuardar()) {
-            Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-            alerta.setTitle("Descartar cambios");
-            alerta.setHeaderText(null);
-            alerta.setContentText("Hay cambios sin guardar. ¿Quieres descartarlos?");
+    /**
+     * Comprueba si se puede cerrar la ventana sin perder cambios.
+     *
+     * @return true si se permite cerrar la ventana
+     */
+    public boolean confirmarCierre() {
 
-            if (alerta.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
-                return;
-            }
+        if (!hayCambiosSinGuardar()) {
+            return true;
         }
 
-        cerrarVentana();
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+        alerta.setTitle("Descartar cambios");
+        alerta.setHeaderText(null);
+        alerta.setContentText("Hay cambios sin guardar. ¿Quieres descartarlos?");
+
+        return alerta.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK;
     }
 
     /**
      * Comprueba si se han introducido o modificado datos en el formulario.
      */
     private boolean hayCambiosSinGuardar() {
+
+        if (guardado) {
+            return false;
+        }
 
         if (!modoEdicion) {
             return !obtenerTexto(txtNombre).isEmpty()
