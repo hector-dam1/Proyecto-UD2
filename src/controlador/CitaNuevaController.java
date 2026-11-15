@@ -66,10 +66,10 @@ public class CitaNuevaController {
             Sesion.setClienteActual(clienteActual);
         }
         consultaActual=consulta;
-        if(cliente==null){alerta("No se ha recibido el cliente identificado.");return;}
-        lblCliente.setText("Cliente: "+cliente.getNombre()+" "+cliente.getApellidos());
+        if(clienteActual==null){alerta("No se ha recibido el cliente identificado.");return;}
+        lblCliente.setText("Cliente: "+clienteActual.getNombre()+" "+clienteActual.getApellidos());
         try {
-            ArrayList<Mascota> mascotas=mascotaDAO.listarPorCliente(cliente.getIdCliente());
+            ArrayList<Mascota> mascotas=mascotaDAO.listarPorCliente(clienteActual.getIdCliente());
             mascotas.removeIf(m->m.getFechaDefuncion()!=null);
             cmbMascota.setItems(FXCollections.observableArrayList(mascotas));
             disponibles.setAll(tratamientoDAO.listarTodos());
