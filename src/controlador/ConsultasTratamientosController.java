@@ -24,6 +24,7 @@ import modelo.entidades.Cliente;
 import modelo.entidades.Consulta;
 import modelo.entidades.Mascota;
 import modelo.entidades.Tratamiento;
+import modelo.sesion.Sesion;
 
 public class ConsultasTratamientosController {
 
@@ -57,7 +58,10 @@ public class ConsultasTratamientosController {
     }
 
     public void configurarContexto(Cliente cliente, Mascota mascota) {
-        clienteActual = cliente;
+        clienteActual = cliente == null ? Sesion.getClienteActual() : cliente;
+        if (clienteActual != null) {
+            Sesion.setClienteActual(clienteActual);
+        }
         mascotaActual = mascota;
         lblMascotaSeleccionada.setText(mascota == null ? "Mascota no seleccionada:"
                 : "Historial de " + mascota.getNombre());
