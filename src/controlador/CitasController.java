@@ -48,8 +48,8 @@ public class CitasController {
         if (clienteActual != null) {
             Sesion.setClienteActual(clienteActual);
         }
-        lblMascotaSeleccionada.setText(cliente == null ? "Cliente no seleccionado:"
-                : "Citas de " + cliente.getNombre() + " " + cliente.getApellidos());
+        lblMascotaSeleccionada.setText(clienteActual == null ? "Cliente no seleccionado:"
+                : "Citas de " + clienteActual.getNombre() + " " + clienteActual.getApellidos());
         cargarCitas();
     }
 
