@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import modelo.dao.MascotaDAO;
 import modelo.entidades.Cliente;
 import modelo.entidades.Mascota;
+import modelo.sesion.Sesion;
 
 /**
  * Controla el formulario de alta y modificacion de mascotas.
@@ -55,7 +56,7 @@ public class MascotaController {
      * Configura el formulario para registrar una mascota nueva.
      */
     public void configurarNuevaMascota(Cliente cliente) {
-        clienteActual = cliente;
+        clienteActual = cliente == null ? Sesion.getClienteActual() : cliente;
         mascotaActual = null;
         modoEdicion = false;
         guardado = false;
@@ -70,7 +71,7 @@ public class MascotaController {
      * Configura el formulario para modificar una mascota existente.
      */
     public void configurarEdicionMascota(Cliente cliente, Mascota mascota) {
-        clienteActual = cliente;
+        clienteActual = cliente == null ? Sesion.getClienteActual() : cliente;
         mascotaActual = mascota;
         modoEdicion = true;
         guardado = false;
