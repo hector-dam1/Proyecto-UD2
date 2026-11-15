@@ -199,6 +199,15 @@ public class IdentificacionController {
             return;
         }
 
+        telefono = normalizarTelefono(telefono);
+        if (telefono == null) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Teléfono no válido",
+                    "Introduce un teléfono español con prefijo +34 y nueve cifras. "
+                    + "Puedes escribirlo con espacios, por ejemplo: +34 600 000 000.");
+            txtTelefono.requestFocus();
+            return;
+        }
+
         try {
             if (altaClientePendiente) {
                 Cliente nuevoCliente = new Cliente(
@@ -498,6 +507,26 @@ public class IdentificacionController {
         }
         int valor = Integer.parseInt(numero);
         return letras.charAt(valor % 23) == dniNie.charAt(dniNie.length() - 1);
+    }
+
+    /**
+     * Normaliza el telefono para almacenarlo con el formato +34 y nueve cifras.
+     * Acepta espacios y guiones en la entrada, y tambien el prefijo 0034.
+     *
+     * @param telefono telefono introducido en el formulario
+     * @return telefono normalizado o null si el formato no es valido
+     */
+    private String normalizarTelefono(String telefono) {
+        String numero = telefono == null ? "" : telefono.trim();
+        numero = numero.replaceAll("[\\s()-]", "");
+
+        if (numero.startsWith("0034")) {
+            numero = "+34" + numero.substring(4);
+        } else if (numero.matches("[0-9]{9}")) {
+            numero = "+34" + numero;
+        }
+
+        return numero.matches("\\+34[0-9]{9}") ? numero : null;
     }
 
     /**
