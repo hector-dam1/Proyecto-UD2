@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import modelo.dao.ConsultaDAO;
 import modelo.entidades.Cliente;
 import modelo.entidades.Consulta;
+import modelo.sesion.Sesion;
 
 public class CitasController {
 
@@ -43,7 +44,10 @@ public class CitasController {
     }
 
     public void configurarCliente(Cliente cliente) {
-        clienteActual = cliente;
+        clienteActual = cliente == null ? Sesion.getClienteActual() : cliente;
+        if (clienteActual != null) {
+            Sesion.setClienteActual(clienteActual);
+        }
         lblMascotaSeleccionada.setText(cliente == null ? "Cliente no seleccionado:"
                 : "Citas de " + cliente.getNombre() + " " + cliente.getApellidos());
         cargarCitas();
