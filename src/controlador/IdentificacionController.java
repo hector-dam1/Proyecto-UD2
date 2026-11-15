@@ -199,12 +199,6 @@ public class IdentificacionController {
             return;
         }
 
-        clienteActual.setNombre(nombre);
-        clienteActual.setApellidos(apellidos);
-        clienteActual.setTelefono(telefono);
-        clienteActual.setEmail(email.isEmpty() ? null : email);
-        clienteActual.setDireccion(direccion);
-
         try {
             if (altaClientePendiente) {
                 Cliente nuevoCliente = new Cliente(
