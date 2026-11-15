@@ -93,7 +93,7 @@
                 <Insets top="10" right="20" bottom="20" left="20"/>
             </padding>
 
-            <Button text="Guardar cambios" onAction="#guardarCliente"/>
+            <Button fx:id="btnGuardarCliente" text="Guardar cambios" onAction="#guardarCliente"/>
             <Button text="Consultar citas" onAction="#abrirCitas"/>
             <Button text="Consultar tratamientos" onAction="#abrirConsultasTratamientos"/>
             <Button text="Cita nueva" onAction="#abrirCitaNueva"/>
