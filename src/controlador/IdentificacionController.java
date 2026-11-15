@@ -24,6 +24,7 @@ import modelo.dao.ClienteDAO;
 import modelo.dao.MascotaDAO;
 import modelo.entidades.Cliente;
 import modelo.entidades.Mascota;
+import modelo.sesion.Sesion;
 
 /**
  * Controla la pantalla de identificacion del cliente.
@@ -108,7 +109,18 @@ public class IdentificacionController {
         colEstadoMascota.setCellValueFactory(
                 datos -> new SimpleStringProperty(datos.getValue().getEstado()));
 
-        actualizarEstadoPantalla(false);
+        clienteActual = Sesion.getClienteActual();
+        if (clienteActual == null) {
+            actualizarEstadoPantalla(false);
+        } else {
+            mostrarDatosCliente(clienteActual);
+            btnGuardarCliente.setText("Guardar cambios");
+            try {
+                cargarMascotas();
+            } catch (SQLException e) {
+                mostrarError("No se han podido cargar las mascotas del cliente.", e);
+            }
+        }
     }
 
     /**
@@ -139,6 +151,7 @@ public class IdentificacionController {
 
             if (cliente == null) {
                 clienteActual = null;
+                Sesion.setClienteActual(null);
                 altaClientePendiente = false;
                 btnGuardarCliente.setText("Guardar cambios");
                 limpiarDatosCliente();
@@ -157,6 +170,7 @@ public class IdentificacionController {
             }
 
             clienteActual = cliente;
+            Sesion.setClienteActual(cliente);
             altaClientePendiente = false;
             btnGuardarCliente.setText("Guardar cambios");
             mostrarDatosCliente(cliente);
@@ -216,6 +230,7 @@ public class IdentificacionController {
                         direccion, email.isEmpty() ? null : email);
                 clienteDAO.insertar(nuevoCliente);
                 clienteActual = nuevoCliente;
+                Sesion.setClienteActual(nuevoCliente);
                 altaClientePendiente = false;
                 btnGuardarCliente.setText("Guardar cambios");
                 mostrarAlerta(Alert.AlertType.INFORMATION, "Cliente registrado",
@@ -229,6 +244,7 @@ public class IdentificacionController {
                 clienteActual.setDireccion(direccion);
 
                 int filasModificadas = clienteDAO.actualizar(clienteActual);
+                Sesion.setClienteActual(clienteActual);
                 if (filasModificadas > 0) {
                     mostrarAlerta(Alert.AlertType.INFORMATION, "Cliente actualizado",
                             "Los datos del cliente se han guardado correctamente.");
