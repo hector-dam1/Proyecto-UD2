@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controlador.CitaNuevaController">
+
+    <top>
+        <VBox spacing="8">
+            <padding>
+                <Insets top="20" right="20" bottom="10" left="20"/>
+            </padding>
+            <Label text="Agendar o modificar cita"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+            <Label fx:id="lblCliente" text="Cliente:"/>
+        </VBox>
+    </top>
+
+    <center>
+        <HBox spacing="20">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <VBox spacing="10" HBox.hgrow="ALWAYS">
+                <Label text="Seleccionar mascota"/>
+                <ComboBox fx:id="cmbMascota" promptText="Selecciona una mascota"
+                          maxWidth="Infinity"/>
+
+                <TitledPane text="Calendario y disponibilidad" expanded="true">
+                    <VBox spacing="10">
+                        <DatePicker fx:id="dpFecha"
+                                    onAction="#cargarHorarios"
+                                    promptText="Selecciona una fecha"/>
+                        <Label text="Horarios disponibles"/>
+                        <ComboBox fx:id="cmbHora"
+                                  promptText="Selecciona una hora"
+                                  maxWidth="Infinity"/>
+                        <Label fx:id="lblDisponibilidad"
+                               text="Selecciona una fecha para consultar disponibilidad."/>
+                    </VBox>
+                </TitledPane>
+            </VBox>
+
+            <VBox spacing="10" HBox.hgrow="ALWAYS">
+                <Label text="Tratamientos disponibles"/>
+                <TableView fx:id="tablaTratamientos" prefHeight="190">
+                    <columns>
+                        <TableColumn fx:id="colTratamiento" text="Tratamiento" prefWidth="180"/>
+                        <TableColumn fx:id="colCategoria" text="Categoría" prefWidth="110"/>
+                        <TableColumn fx:id="colDuracion" text="Duración" prefWidth="90"/>
+                        <TableColumn fx:id="colPrecio" text="Precio (€)" prefWidth="90"/>
+                    </columns>
+                </TableView>
+
+                <Button text="Agregar tratamiento"
+                        onAction="#agregarTratamiento"/>
+
+                <Label text="Tratamientos seleccionados"/>
+                <TableView fx:id="tablaTratamientosSeleccionados" prefHeight="130">
+                    <columns>
+                        <TableColumn fx:id="colSeleccionadoNombre" text="Tratamiento" prefWidth="180"/>
+                        <TableColumn fx:id="colSeleccionadoPrecio" text="Precio (€)" prefWidth="100"/>
+                        <TableColumn fx:id="colSeleccionadoDuracion" text="Duración" prefWidth="100"/>
+                    </columns>
+                </TableView>
+
+                <Button text="Eliminar tratamiento"
+                        onAction="#eliminarTratamiento"/>
+
+                <HBox spacing="15">
+                    <Label text="Precio total:"/>
+                    <Label fx:id="lblPrecioTotal" text="0,00 €"/>
+                    <Label text="Duración total:"/>
+                    <Label fx:id="lblDuracionTotal" text="0 minutos"/>
+                </HBox>
+
+                <Label text="Notas"/>
+                <TextArea fx:id="txtNota" promptText="Notas de la cita..."
+                          prefRowCount="3" wrapText="true"/>
+            </VBox>
+        </HBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <padding>
+                <Insets top="10" right="20" bottom="20" left="20"/>
+            </padding>
+            <Button text="Guardar" onAction="#guardarCita"/>
+            <Button text="Cancelar" onAction="#cancelar"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

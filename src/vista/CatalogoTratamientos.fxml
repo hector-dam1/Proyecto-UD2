@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controlador.CatalogoTratamientosController">
+
+    <top>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="20" right="20" bottom="10" left="20"/>
+            </padding>
+            <Label text="Catálogo de tratamientos"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Categoría:"/>
+                <ComboBox fx:id="cmbCategoria"
+                          promptText="Todas las categorías"
+                          onAction="#filtrarCategoria"/>
+                <Button text="Mostrar todos" onAction="#mostrarTodos"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <TableView fx:id="tablaTratamientos" prefHeight="400">
+                <columns>
+                    <TableColumn fx:id="colCategoria" text="Categoría" prefWidth="130"/>
+                    <TableColumn fx:id="colNombre" text="Tratamiento" prefWidth="210"/>
+                    <TableColumn fx:id="colDescripcion" text="Descripción" prefWidth="260"/>
+                    <TableColumn fx:id="colDuracion" text="Duración" prefWidth="100"/>
+                    <TableColumn fx:id="colPrecio" text="Precio (€)" prefWidth="100"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_RIGHT">
+            <padding>
+                <Insets top="10" right="20" bottom="20" left="20"/>
+            </padding>
+            <Button text="Inicio" onAction="#volverInicio"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

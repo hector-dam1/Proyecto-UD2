@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controlador.ConsultasTratamientosController">
+
+    <top>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="20" right="20" bottom="10" left="20"/>
+            </padding>
+            <Label text="Consultas y tratamientos"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+            <Label fx:id="lblMascotaSeleccionada"
+                   text="Mascota seleccionada:"/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <TitledPane text="Registro de consultas" expanded="true">
+                <TableView fx:id="tablaConsultas" prefHeight="170">
+                    <columns>
+                        <TableColumn fx:id="colFechaConsulta" text="Fecha" prefWidth="130"/>
+                        <TableColumn fx:id="colNotaConsulta" text="Nota" prefWidth="300"/>
+                        <TableColumn fx:id="colVeterinarioConsulta" text="Veterinario" prefWidth="180"/>
+                        <TableColumn fx:id="colEstadoConsulta" text="Estado" prefWidth="120"/>
+                    </columns>
+                </TableView>
+            </TitledPane>
+
+            <TitledPane text="Historial de tratamientos" expanded="true">
+                <VBox spacing="10">
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Filtrar por categoría:"/>
+                        <ComboBox fx:id="cmbCategoria"
+                                  promptText="Todas las categorías"
+                                  onAction="#filtrarTratamientos"/>
+                    </HBox>
+
+                    <TableView fx:id="tablaHistorialTratamientos" prefHeight="220">
+                        <columns>
+                            <TableColumn fx:id="colFechaTratamiento" text="Fecha" prefWidth="120"/>
+                            <TableColumn fx:id="colNombreTratamiento" text="Tratamiento" prefWidth="200"/>
+                            <TableColumn fx:id="colCategoriaTratamiento" text="Categoría" prefWidth="120"/>
+                            <TableColumn fx:id="colVeterinarioTratamiento" text="Veterinario" prefWidth="160"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </TitledPane>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_RIGHT">
+            <padding>
+                <Insets top="10" right="20" bottom="20" left="20"/>
+            </padding>
+            <Button text="Inicio" onAction="#volverInicio"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>
