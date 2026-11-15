@@ -71,7 +71,7 @@ El conector JDBC ya está dentro del repositorio, en la carpeta `lib`. JavaFX de
 2. Abre una terminal en la carpeta raíz del proyecto.
 3. Ejecuta el script SQL:
 
-**Windows (PowerShell o CMD):**
+**Windows (Símbolo del sistema / CMD):**
 
 ```powershell
 mysql -u root -p < Proyecto_UD2_MySQL.sql
