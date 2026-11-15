@@ -24,6 +24,7 @@ import modelo.entidades.Cliente;
 import modelo.entidades.Consulta;
 import modelo.entidades.Mascota;
 import modelo.entidades.Tratamiento;
+import modelo.sesion.Sesion;
 
 public class CitaNuevaController {
     @FXML private Label lblCliente, lblDisponibilidad, lblPrecioTotal, lblDuracionTotal;
@@ -60,7 +61,11 @@ public class CitaNuevaController {
     }
 
     public void configurarContexto(Cliente cliente, Consulta consulta) {
-        clienteActual=cliente; consultaActual=consulta;
+        clienteActual = cliente == null ? Sesion.getClienteActual() : cliente;
+        if (clienteActual != null) {
+            Sesion.setClienteActual(clienteActual);
+        }
+        consultaActual=consulta;
         if(cliente==null){alerta("No se ha recibido el cliente identificado.");return;}
         lblCliente.setText("Cliente: "+cliente.getNombre()+" "+cliente.getApellidos());
         try {
