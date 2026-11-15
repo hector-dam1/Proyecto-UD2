@@ -118,7 +118,7 @@ public class IdentificacionController {
     private void buscarCliente() {
 
         String dniNif = txtDniNif.getText() == null
-                ? "" : txtDniNif.getText().trim();
+                ? "" : txtDniNif.getText().trim().toUpperCase();
 
         if (dniNif.isEmpty()) {
             mostrarAlerta(Alert.AlertType.WARNING, "Identificacion",
@@ -140,6 +140,7 @@ public class IdentificacionController {
             if (cliente == null) {
                 clienteActual = null;
                 altaClientePendiente = false;
+                btnGuardarCliente.setText("Guardar cambios");
                 limpiarDatosCliente();
                 tablaMascotas.getItems().clear();
                 actualizarEstadoPantalla(false);
