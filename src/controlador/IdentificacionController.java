@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -51,6 +52,9 @@ public class IdentificacionController {
     private TextField txtDireccion;
 
     @FXML
+    private Button btnGuardarCliente;
+
+    @FXML
     private TableView<Mascota> tablaMascotas;
 
     @FXML
@@ -75,6 +79,7 @@ public class IdentificacionController {
     private final MascotaDAO mascotaDAO = new MascotaDAO();
 
     private Cliente clienteActual;
+    private boolean altaClientePendiente;
 
     /**
      * Configura las columnas de la tabla cuando JavaFX carga el FXML.
@@ -122,21 +127,37 @@ public class IdentificacionController {
             return;
         }
 
+        if (!esDniNieValido(dniNif)) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Documento no válido",
+                    "Introduce un DNI o NIE válido.");
+            txtDniNif.requestFocus();
+            return;
+        }
+
         try {
             Cliente cliente = clienteDAO.buscarPorDni(dniNif);
 
             if (cliente == null) {
                 clienteActual = null;
+                altaClientePendiente = false;
                 limpiarDatosCliente();
                 tablaMascotas.getItems().clear();
                 actualizarEstadoPantalla(false);
 
-                mostrarAlerta(Alert.AlertType.INFORMATION, "Cliente no encontrado",
-                        "No existe ningún cliente con ese DNI/NIF.");
+                if (confirmar("Cliente no encontrado",
+                        "No existe ningún cliente con ese DNI/NIE. ¿Deseas añadirlo?")) {
+                    altaClientePendiente = true;
+                    txtDniCliente.setText(dniNif.toUpperCase());
+                    actualizarEstadoPantalla(false);
+                    btnGuardarCliente.setText("Registrar cliente");
+                    txtNombre.requestFocus();
+                }
                 return;
             }
 
             clienteActual = cliente;
+            altaClientePendiente = false;
+            btnGuardarCliente.setText("Guardar cambios");
             mostrarDatosCliente(cliente);
             cargarMascotas();
 
@@ -151,14 +172,17 @@ public class IdentificacionController {
     @FXML
     private void guardarCliente() {
 
-        if (clienteActual == null) {
+        if (clienteActual == null && !altaClientePendiente) {
             mostrarAlerta(Alert.AlertType.WARNING, "Guardar cliente",
-                    "Primero debes buscar e identificar un cliente.");
+                    "Primero debes buscar un cliente o iniciar su registro.");
             return;
         }
 
-        if (!confirmar("Guardar cambios",
-                "¿Quieres guardar los cambios realizados en los datos del cliente?")) {
+        String tituloConfirmacion = altaClientePendiente ? "Registrar cliente" : "Guardar cambios";
+        String mensajeConfirmacion = altaClientePendiente
+                ? "¿Quieres registrar este nuevo cliente?"
+                : "¿Quieres guardar los cambios realizados en los datos del cliente?";
+        if (!confirmar(tituloConfirmacion, mensajeConfirmacion)) {
             return;
         }
 
@@ -181,18 +205,38 @@ public class IdentificacionController {
         clienteActual.setDireccion(direccion);
 
         try {
-            int filasModificadas = clienteDAO.actualizar(clienteActual);
-
-            if (filasModificadas > 0) {
-                mostrarAlerta(Alert.AlertType.INFORMATION, "Cliente actualizado",
-                        "Los datos del cliente se han guardado correctamente.");
+            if (altaClientePendiente) {
+                Cliente nuevoCliente = new Cliente(
+                        txtDniCliente.getText().trim().toUpperCase(),
+                        nombre, apellidos, telefono,
+                        direccion, email.isEmpty() ? null : email);
+                clienteDAO.insertar(nuevoCliente);
+                clienteActual = nuevoCliente;
+                altaClientePendiente = false;
+                btnGuardarCliente.setText("Guardar cambios");
+                mostrarAlerta(Alert.AlertType.INFORMATION, "Cliente registrado",
+                        "El nuevo cliente se ha registrado correctamente.");
+                cargarMascotas();
             } else {
-                mostrarAlerta(Alert.AlertType.WARNING, "Sin cambios",
-                        "No se ha actualizado ningún registro.");
-            }
+                clienteActual.setNombre(nombre);
+                clienteActual.setApellidos(apellidos);
+                clienteActual.setTelefono(telefono);
+                clienteActual.setEmail(email.isEmpty() ? null : email);
+                clienteActual.setDireccion(direccion);
 
+                int filasModificadas = clienteDAO.actualizar(clienteActual);
+                if (filasModificadas > 0) {
+                    mostrarAlerta(Alert.AlertType.INFORMATION, "Cliente actualizado",
+                            "Los datos del cliente se han guardado correctamente.");
+                } else {
+                    mostrarAlerta(Alert.AlertType.WARNING, "Sin cambios",
+                            "No se ha actualizado ningún registro.");
+                }
+            }
         } catch (SQLException e) {
-            mostrarError("No se han podido guardar los datos del cliente.", e);
+            mostrarError(altaClientePendiente
+                    ? "No se ha podido registrar el cliente. Comprueba que el DNI/NIE no esté duplicado."
+                    : "No se han podido guardar los datos del cliente.", e);
         }
     }
 
@@ -322,11 +366,12 @@ public class IdentificacionController {
      */
     private void actualizarEstadoPantalla(boolean clienteIdentificado) {
 
-        txtNombre.setDisable(!clienteIdentificado);
-        txtApellidos.setDisable(!clienteIdentificado);
-        txtTelefono.setDisable(!clienteIdentificado);
-        txtEmail.setDisable(!clienteIdentificado);
-        txtDireccion.setDisable(!clienteIdentificado);
+        boolean puedeEditarDatos = clienteIdentificado || altaClientePendiente;
+        txtNombre.setDisable(!puedeEditarDatos);
+        txtApellidos.setDisable(!puedeEditarDatos);
+        txtTelefono.setDisable(!puedeEditarDatos);
+        txtEmail.setDisable(!puedeEditarDatos);
+        txtDireccion.setDisable(!puedeEditarDatos);
 
         tablaMascotas.setDisable(!clienteIdentificado);
     }
@@ -437,6 +482,27 @@ public class IdentificacionController {
         } catch (IOException | NullPointerException e) {
             mostrarError("No se ha podido abrir la pantalla " + archivoFXML + ".", e);
         }
+    }
+
+    /**
+     * Comprueba la letra de control de un DNI o NIE español.
+     */
+    private boolean esDniNieValido(String documento) {
+        String dniNie = documento == null ? "" : documento.trim().toUpperCase();
+        if (!dniNie.matches("(\\d{8}[A-Z]|[XYZ]\\d{7}[A-Z])")) {
+            return false;
+        }
+
+        String letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+        String numero = dniNie.substring(0, dniNie.length() - 1);
+        if (dniNie.charAt(0) == 'X' || dniNie.charAt(0) == 'Y'
+                || dniNie.charAt(0) == 'Z') {
+            numero = (dniNie.charAt(0) == 'X' ? "0"
+                    : dniNie.charAt(0) == 'Y' ? "1" : "2")
+                    + dniNie.substring(1, 8);
+        }
+        int valor = Integer.parseInt(numero);
+        return letras.charAt(valor % 23) == dniNie.charAt(dniNie.length() - 1);
     }
 
     /**
